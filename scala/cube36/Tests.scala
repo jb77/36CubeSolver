@@ -79,8 +79,8 @@ class Tests {
   @Test
   def testSolve {
     val p=CheatCubePuzzle()
-    val solution=p.solve
-    println(solution)
+    val solution=p.solve(List[Board]())
+    Assert.assertTrue(solution.size==96)
     
   }
 

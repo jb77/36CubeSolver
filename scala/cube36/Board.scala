@@ -1,6 +1,7 @@
 package cube36
 
 class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of cols*/ ) {
+  
   val row1 = List[Int](1, 3, 4, 5, 2, 0)
   val row2 = List[Int](2, 5, 0, 4, 1, 3)
   val row3 = List[Int](0, 1, 3, 2, 5, 4)
@@ -9,12 +10,8 @@ class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of co
   val row6 = List[Int](3, 0, 2, 1, 4, 5)
   val contours = List[List[Int]](row1, row2, row3, row4, row5, row6)
 
-  def spaces: Seq[(Int, Int)] = {
-/*    val occupied = for (row <- placedPieces; col <- row if col.isDefined) yield (placedPieces.indexOf(row), row.indexOf(col))
-    val allSpots: IndexedSeq[(Int, Int)] = for (row <- 0 to 5; col <- 0 to 5) yield (row, col)
-    (allSpots.filterNot(s => occupied.contains(s))).toSet*/
-    
-    (for (row <- 0 to 5; col <- 0 to 5;if(placedPieces(row)(col)).isEmpty) yield (row, col))//.toSet
+  def spaces: Seq[(Int, Int)] = {  
+    (for (row <- 0 to 5; col <- 0 to 5;if(placedPieces(row)(col)).isEmpty) yield (row, col))
   }
 
   def suitable(space: (Int, Int), piece: Piece): Boolean = {
@@ -65,9 +62,21 @@ class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of co
     new Board(placedPieces.updated(rowNum, newRow))
   }
 
-  override def toString: String = {
-    placedPieces.toString
+
+  def print:Unit={
+    println("============")
+    for(row<-placedPieces) {
+      for(piece<-row) {
+        piece match {
+          case Some(p) => System.out.print(" " + p + " ")
+          case None => System.out.print(" _ ")
+        }    	  
+      }
+      println
+    }
+    println("============")
   }
+  
 }
 
 object Board {
