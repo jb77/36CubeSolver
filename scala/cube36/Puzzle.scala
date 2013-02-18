@@ -8,91 +8,49 @@ case object Green extends Colour;
 case object Yellow extends Colour;
 case object Orange extends Colour;
 
+
 case class Piece(val colour: Colour, val size: Int) {
+  require(size<=6 && size>=1)
   
-  override def toString:String = {
-    colour.toString().head.toString + size.toString    
-  }
-  
+  override def toString: String = colour.toString().head.toString + size.toString  
 }
 
-class CubePuzzle(val board: Board, val availablePieces: Set[Piece]) {
+
+class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
 
   def addPiece(rowNum: Int, colNum: Int, piece: Piece): CubePuzzle = {
     val newBoard = board.addPiece(rowNum, colNum, piece)
-    new CubePuzzle(newBoard, availablePieces - piece)
+    new CubePuzzle(newBoard, availablePieces.filterNot(_ == piece))
   }
 
-  def softAddPiece(rowNum: Int, colNum: Int, piece: Piece): Option[CubePuzzle] = {
-    try {
-    	val newBoard = board.addPiece(rowNum, colNum, piece)
-    	Some(new CubePuzzle(newBoard, availablePieces - piece))
-    }
-    catch {
-        case _:Exception => None
-    }
-    
-  }
-
-  override def toString: String = {
-    board.placedPieces.toString + "\n\n" + availablePieces
-  }
-  
-  
-  def solve(solutionsSoFar:List[Board]):List[Board] = {    
-    if(this.availablePieces.size==0) {(this.board.print);this.board::solutionsSoFar}
+  def solve(solutionsSoFar: List[Board]): List[Board] = {
+    if (this.availablePieces.size == 0) { this.board :: solutionsSoFar }
     else {
-      val nextPiece=availablePieces.head
-      val availableSpots=board.spaces.filter(space=>board.suitable(space,nextPiece))
-      val sols=for(spot<-availableSpots) yield softAddPiece(spot._1, spot._2, nextPiece).get.solve(solutionsSoFar)
-      sols.flatten.toList      
-    }    
+      val nextPiece = availablePieces.head
+      val availableSpots = board.spaces.filter(space => board.suitable(space, nextPiece))
+      val sols = for (spot <- availableSpots) yield addPiece(spot._1, spot._2, nextPiece).solve(solutionsSoFar)
+      sols.flatten.toList
+    }
   }
 
 }
+
 
 object CubePuzzle {
+
   val startingBoard = Board()
-  val availablePieces = Set[Piece]() ++
+  val availablePieces = (List[Piece]() ++
     getPieces(Yellow, 6) ++
     getPieces(Red, 6) ++
     getPieces(Purple, 6) ++
     getPieces(Blue, 6) ++
     getPieces(Green, 6) ++
-    getPieces(Orange, 6)
+    getPieces(Orange, 6)).
+    filterNot(_ == Piece(Yellow, 5)).
+    filterNot(_ == Piece(Orange, 6))
 
-  def getPieces(colour: Colour, maxSize: Int): Set[Piece] = {
-    val p = for (x <- 1 to 6) yield Piece(colour, x)
-    p.toSet
-  }
-
-  def apply() = {
-    new CubePuzzle(startingBoard, availablePieces)
-  }
-
-}
-
-object CheatCubePuzzle {
+  def getPieces(colour: Colour, maxSize: Int): Set[Piece] = (for (x <- 1 to 6) yield Piece(colour, x)).toSet
+    
+  def apply() = new CubePuzzle(startingBoard, availablePieces)
   
-  var solvingCount=0;
-  var minSoFar=34;
-  
-  val startingBoard = CheatBoard()
-  val availablePieces = Set[Piece]() ++
-    getPieces(Yellow, 6) ++
-    getPieces(Red, 6) ++
-    getPieces(Purple, 6) ++
-    getPieces(Blue, 6) ++
-    getPieces(Green, 6) ++
-    getPieces(Orange, 6)
-
-  def getPieces(colour: Colour, maxSize: Int): Set[Piece] = {
-    val p = for (x <- 1 to 6) yield Piece(colour, x)
-    p.toSet
-  }
-
-  def apply() = {
-    new CubePuzzle(startingBoard, (availablePieces-Piece(Yellow,5))-Piece(Orange,6))
-  }
-
 }
