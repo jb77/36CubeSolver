@@ -8,13 +8,11 @@ case object Green extends Colour;
 case object Yellow extends Colour;
 case object Orange extends Colour;
 
-
 case class Piece(val colour: Colour, val size: Int) {
-  require(size<=6 && size>=1)
-  
-  override def toString: String = colour.toString().head.toString + size.toString  
-}
+  require(size <= 6 && size >= 1,"Piece size out of range")
 
+  override def toString: String = colour.toString().head.toString + size.toString
+}
 
 class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
 
@@ -35,10 +33,10 @@ class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
 
 }
 
-
 object CubePuzzle {
-
-  val startingBoard = Board()
+  // Have to put two pieces in 'special' positions, where they wouldn't be expected to fit.
+  // No solution otherwise.
+  val startingBoard = Board().addPiece(1, 2, Piece(Yellow, 5),false).addPiece(3, 2, Piece(Orange, 6),false)
   val availablePieces = (List[Piece]() ++
     getPieces(Yellow, 6) ++
     getPieces(Red, 6) ++
@@ -50,7 +48,7 @@ object CubePuzzle {
     filterNot(_ == Piece(Orange, 6))
 
   def getPieces(colour: Colour, maxSize: Int): Set[Piece] = (for (x <- 1 to 6) yield Piece(colour, x)).toSet
-    
+
   def apply() = new CubePuzzle(startingBoard, availablePieces)
-  
+
 }

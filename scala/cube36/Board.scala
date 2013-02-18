@@ -36,7 +36,7 @@ class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of co
     true
   }
 
-  def addPiece(rowNum: Int, colNum: Int, piece: Piece,checkSuitable:Boolean=false): Board = {
+  def addPiece(rowNum: Int, colNum: Int, piece: Piece,checkSuitable:Boolean=true): Board = {
     if(checkSuitable && !suitable((rowNum,colNum),piece)) throw new IllegalArgumentException("Not suitable for this poition")
       
     val newRow=placedPieces(rowNum).updated(colNum, Some(piece))
@@ -61,12 +61,8 @@ class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of co
 
 object Board {
   def apply(): Board = {
-    // Have to put two pieces in 'special' positions, where they wouldn't be expected to fit.
-    // No solution otherwise.
-    val bRow = IndexedSeq[Option[Piece]](None, None, Some(Piece(Yellow, 5)), None, None, None)
-    val dRow = IndexedSeq[Option[Piece]](None, None, Some(Piece(Orange, 6)), None, None, None)
     val emptyRow = IndexedSeq[Option[Piece]](None, None, None, None, None, None)
-    val emptyPieces = IndexedSeq(emptyRow, bRow, emptyRow, dRow, emptyRow, emptyRow)
+    val emptyPieces = IndexedSeq(emptyRow, emptyRow, emptyRow, emptyRow, emptyRow, emptyRow)        
     new Board(emptyPieces)
   }
 }  
