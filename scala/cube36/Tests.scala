@@ -83,8 +83,8 @@ class Tests {
   @Test
   def testSolve {
     val p = CubePuzzle()
-    val solution = p.solve(List[Board]())
-    assertTrue(solution.size == 96)
+    val solutions = p.solve()
+    assertTrue(solutions.size == 96)
   }
 
 }
