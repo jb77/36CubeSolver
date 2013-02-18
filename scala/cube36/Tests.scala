@@ -8,12 +8,12 @@ class Tests {
   @Test
   def checkBoard {
     val p = CubePuzzle()
-    assertTrue(p.board.row1.sum == 15)
-    assertTrue(p.board.row2.sum == 15)
-    assertTrue(p.board.row3.sum == 15)
-    assertTrue(p.board.row4.sum == 15)
-    assertTrue(p.board.row5.sum == 15)
-    assertTrue(p.board.row6.sum == 15)
+    assertTrue(p.board.row1Heights.sum == 15)
+    assertTrue(p.board.row2Heights.sum == 15)
+    assertTrue(p.board.row3Heights.sum == 15)
+    assertTrue(p.board.row4Heights.sum == 15)
+    assertTrue(p.board.row5Heights.sum == 15)
+    assertTrue(p.board.row6Heights.sum == 15)
 
     val rowsOfcols = p.board.contours
     assertTrue(rowsOfcols.map(row => row(0)).sum == 15)

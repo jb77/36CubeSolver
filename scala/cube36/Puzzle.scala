@@ -3,7 +3,7 @@ package cube36
 /**
  * An immutable class representing the state of a 36 Cube puzzle
  */
-class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
+case class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
 
   /**
    * Add a piece to this puzzle, to create new instance of the puzzle
@@ -15,7 +15,7 @@ class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
    */
   def addPiece(rowNum: Int, colNum: Int, piece: Piece, checkSuitable: Boolean = true): CubePuzzle = {
     val newBoard = board.addPiece(rowNum, colNum, piece,checkSuitable)
-    new CubePuzzle(newBoard, availablePieces.filterNot(_ == piece))
+    CubePuzzle(newBoard, availablePieces.filterNot(_ == piece))
   }
 
   /**

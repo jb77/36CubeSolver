@@ -1,14 +1,14 @@
 package cube36
 
-class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of cols*/ ) {
+case class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of cols*/ ) {
 
-  val row1 = List[Int](1, 3, 4, 5, 2, 0)
-  val row2 = List[Int](2, 5, 0, 4, 1, 3)
-  val row3 = List[Int](0, 1, 3, 2, 5, 4)
-  val row4 = List[Int](5, 4, 1, 3, 0, 2)
-  val row5 = List[Int](4, 2, 5, 0, 3, 1)
-  val row6 = List[Int](3, 0, 2, 1, 4, 5)
-  val contours = List[List[Int]](row1, row2, row3, row4, row5, row6)
+  val row1Heights = List[Int](1, 3, 4, 5, 2, 0)
+  val row2Heights = List[Int](2, 5, 0, 4, 1, 3)
+  val row3Heights = List[Int](0, 1, 3, 2, 5, 4)
+  val row4Heights = List[Int](5, 4, 1, 3, 0, 2)
+  val row5Heights = List[Int](4, 2, 5, 0, 3, 1)
+  val row6Heights = List[Int](3, 0, 2, 1, 4, 5)
+  val contours = List[List[Int]](row1Heights, row2Heights, row3Heights, row4Heights, row5Heights, row6Heights)
 
   private[cube36] def spaces: Seq[(Int, Int)] = for (row <- 0 to 5; col <- 0 to 5; if (placedPieces(row)(col)).isEmpty) yield (row, col)
 
@@ -35,7 +35,7 @@ class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows of co
     if (checkSuitable && !suitable((rowNum, colNum), piece)) throw new IllegalArgumentException("Not suitable for this poition")
 
     val newRow = placedPieces(rowNum).updated(colNum, Some(piece))
-    new Board(placedPieces.updated(rowNum, newRow))
+    Board(placedPieces.updated(rowNum, newRow))
   }
   
   private[this] def rowString(row:IndexedSeq[Option[Piece]]):String = {
@@ -60,6 +60,6 @@ object Board {
   def apply(): Board = {
     val emptyRow = IndexedSeq[Option[Piece]](None, None, None, None, None, None)
     val emptyPieces = IndexedSeq(emptyRow, emptyRow, emptyRow, emptyRow, emptyRow, emptyRow)
-    new Board(emptyPieces)
+    Board(emptyPieces)
   }
 }  
