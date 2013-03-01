@@ -42,7 +42,7 @@ case class Board(val placedPieces: IndexedSeq[IndexedSeq[Option[Piece]]] /*rows 
     val r=for(p<-row) yield p match {
           case Some(pc) => "|" + pc 
           case None => " _ "
-        }
+        } 
     r.foldLeft("")((a,b)=>a+b) + "|"
   }
 

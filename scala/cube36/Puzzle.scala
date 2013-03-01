@@ -24,7 +24,7 @@ case class CubePuzzle(val board: Board, val availablePieces: List[Piece]) {
    * @return a list of all valid solutions
    */
   def solve(solutionsSoFar: List[Board]=List[Board]()): List[Board] = {
-    if (this.availablePieces.size == 0) { this.board :: solutionsSoFar }
+    if (this.availablePieces.size == 0) this.board :: solutionsSoFar
     else {
       val nextPiece = availablePieces.head
       val availableSpots = board.spaces.filter(space => board.suitable(space, nextPiece))
